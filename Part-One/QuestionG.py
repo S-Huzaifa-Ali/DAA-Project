@@ -1,53 +1,31 @@
 def find_best_transaction(prices):
-    """
-    Find the best buy and sell days to maximize profit using divide and conquer.
-    Time Complexity: O(n log n)
-    
-    Args:
-        prices: list of prices where prices[i] is the price on day i+1
-    
-    Returns:
-        tuple: (buy_day, sell_day, max_profit, comparisons)
-               Days are 1-indexed
-    """
     n = len(prices)
     if n < 2:
         return None, None, 0, 0
     
-    comparisons = [0]  # Use list to track across recursive calls
+    comparisons = [0]
     
     def divide_conquer(left, right):
-        """
-        Recursively find best transaction in subarray.
-        
-        Returns:
-            tuple: (buy_day, sell_day, max_profit, min_price, min_day, max_price, max_day)
-        """
-        # Base case: single day
         if left == right:
             comparisons[0] += 0
             return (None, None, 0, prices[left], left, prices[left], left)
         
         mid = (left + right) // 2
         
-        # Recursively solve left and right halves
         left_result = divide_conquer(left, mid)
         right_result = divide_conquer(mid + 1, right)
         
-        # Unpack results
         (left_buy, left_sell, left_profit, 
          left_min_price, left_min_day, left_max_price, left_max_day) = left_result
         
         (right_buy, right_sell, right_profit,
          right_min_price, right_min_day, right_max_price, right_max_day) = right_result
         
-        # Best transaction crossing the middle: buy in left, sell in right
         comparisons[0] += 1
         cross_profit = right_max_price - left_min_price
         cross_buy = left_min_day
         cross_sell = right_max_day
         
-        # Find the best among: left only, right only, crossing
         best_profit = left_profit
         best_buy = left_buy
         best_sell = left_sell
@@ -64,7 +42,6 @@ def find_best_transaction(prices):
             best_buy = cross_buy
             best_sell = cross_sell
         
-        # Determine overall min and max for this range
         comparisons[0] += 1
         if left_min_price <= right_min_price:
             min_price = left_min_price
@@ -87,7 +64,6 @@ def find_best_transaction(prices):
     result = divide_conquer(0, n - 1)
     buy_day, sell_day, max_profit = result[0], result[1], result[2]
     
-    # Convert to 1-indexed days
     if buy_day is not None:
         buy_day += 1
         sell_day += 1
@@ -96,12 +72,6 @@ def find_best_transaction(prices):
 
 
 def find_best_transaction_optimized(prices):
-    """
-    Optimized O(n) solution using Kadane's algorithm approach.
-    Included for comparison, though the problem asks for O(n log n).
-    
-    Time Complexity: O(n)
-    """
     if len(prices) < 2:
         return None, None, 0
     
@@ -130,14 +100,12 @@ def find_best_transaction_optimized(prices):
 
 
 def test_stock_algorithm():
-    """Test the stock buy-sell algorithm with various inputs."""
     
     print("=" * 70)
     print("STOCK BUY-SELL PROBLEM - Divide and Conquer O(n log n)")
     print("=" * 70)
     print()
     
-    # Test Case 1: Given example
     print("-" * 70)
     print("Test Case 1: Given Example")
     print("-" * 70)
@@ -154,7 +122,6 @@ def test_stock_algorithm():
     print(f"Comparisons made: {comps}")
     print()
     
-    # Test Case 2: Decreasing prices (no profit)
     print("-" * 70)
     print("Test Case 2: Decreasing Prices (No Profit)")
     print("-" * 70)
@@ -171,7 +138,6 @@ def test_stock_algorithm():
     print(f"Comparisons made: {comps}")
     print()
     
-    # Test Case 3: Increasing prices
     print("-" * 70)
     print("Test Case 3: Increasing Prices")
     print("-" * 70)
@@ -188,7 +154,6 @@ def test_stock_algorithm():
     print(f"Comparisons made: {comps}")
     print()
     
-    # Test Case 4: Valley and peak
     print("-" * 70)
     print("Test Case 4: Valley and Peak Pattern")
     print("-" * 70)
@@ -205,7 +170,6 @@ def test_stock_algorithm():
     print(f"Comparisons made: {comps}")
     print()
     
-    # Test Case 5: Multiple peaks
     print("-" * 70)
     print("Test Case 5: Multiple Peaks")
     print("-" * 70)
@@ -222,7 +186,6 @@ def test_stock_algorithm():
     print(f"Comparisons made: {comps}")
     print()
     
-    # Test Case 6: Larger dataset
     print("-" * 70)
     print("Test Case 6: Larger Dataset (20 days)")
     print("-" * 70)
@@ -241,7 +204,6 @@ def test_stock_algorithm():
     print(f"Theoretical complexity: O(n log n) = O({len(prices6)} * log {len(prices6)}) ≈ {len(prices6) * len(prices6).bit_length()}")
     print()
     
-    # Comparison with O(n) solution
     print("=" * 70)
     print("COMPARISON: Divide & Conquer O(n log n) vs Linear O(n)")
     print("=" * 70)
@@ -268,7 +230,6 @@ def test_stock_algorithm():
 
 
 def explain_algorithm():
-    """Explain how the divide and conquer algorithm works."""
     print("=" * 70)
     print("ALGORITHM EXPLANATION")
     print("=" * 70)
