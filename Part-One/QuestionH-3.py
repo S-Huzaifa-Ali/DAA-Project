@@ -1,5 +1,4 @@
 class BankCard:
-    """Represents a bank card with an account number."""
     
     def __init__(self, card_id, account):
         self.card_id = card_id
@@ -10,107 +9,57 @@ class BankCard:
 
 
 class EquivalenceTester:
-    """
-    Simulates the equivalence tester device.
-    Can compare two cards and determine if they're equivalent.
-    """
     
     def __init__(self):
         self.comparison_count = 0
     
     def are_equivalent(self, card1, card2):
-        """
-        Check if two cards correspond to the same account.
-        
-        Args:
-            card1, card2: BankCard objects
-        
-        Returns:
-            bool: True if cards have same account
-        """
         self.comparison_count += 1
         return card1.account == card2.account
     
     def reset_count(self):
-        """Reset the comparison counter."""
         self.comparison_count = 0
     
     def get_count(self):
-        """Get the number of comparisons made."""
         return self.comparison_count
 
 
 def find_majority_card(cards, tester):
-    """
-    Find if there exists a set of more than n/2 cards that are equivalent.
-    Uses divide-and-conquer to achieve O(n log n) comparisons.
-    
-    Algorithm:
-    1. Divide cards into two halves
-    2. Recursively find majority candidate in each half
-    3. If both halves have same candidate, verify it
-    4. If different candidates, test both to see which (if any) is global majority
-    
-    Args:
-        cards: list of BankCard objects
-        tester: EquivalenceTester object
-    
-    Returns:
-        BankCard or None: A card representing the majority account, or None
-    """
     
     def find_candidate(cards_subset):
-        """
-        Recursively find a majority candidate using divide and conquer.
-        
-        Returns:
-            BankCard or None: candidate card
-        """
         n = len(cards_subset)
         
-        # Base cases
         if n == 0:
             return None
         if n == 1:
             return cards_subset[0]
         if n == 2:
-            # Check if they're equivalent
             if tester.are_equivalent(cards_subset[0], cards_subset[1]):
                 return cards_subset[0]
             else:
                 return None
         
-        # Divide
         mid = n // 2
         left_cards = cards_subset[:mid]
         right_cards = cards_subset[mid:]
         
-        # Conquer: find candidates in each half
         left_candidate = find_candidate(left_cards)
         right_candidate = find_candidate(right_cards)
         
-        # Combine
-        # Case 1: One or both halves have no candidate
         if left_candidate is None and right_candidate is None:
             return None
         
         if left_candidate is None:
-            # Check if right_candidate is majority in full subset
             count = count_equivalent(cards_subset, right_candidate, tester)
             return right_candidate if count > n // 2 else None
         
         if right_candidate is None:
-            # Check if left_candidate is majority in full subset
             count = count_equivalent(cards_subset, left_candidate, tester)
             return left_candidate if count > n // 2 else None
         
-        # Case 2: Both halves have candidates
-        # Check if they're the same
         if tester.are_equivalent(left_candidate, right_candidate):
-            # Same candidate in both halves - guaranteed to be majority
             return left_candidate
         
-        # Different candidates - check both
         left_count = count_equivalent(cards_subset, left_candidate, tester)
         right_count = count_equivalent(cards_subset, right_candidate, tester)
         
@@ -122,7 +71,6 @@ def find_majority_card(cards, tester):
             return None
     
     def count_equivalent(cards_subset, candidate, tester):
-        """Count how many cards in subset are equivalent to candidate."""
         if candidate is None:
             return 0
         
@@ -132,14 +80,11 @@ def find_majority_card(cards, tester):
                 count += 1
         return count
     
-    # Find the candidate
     candidate = find_candidate(cards)
     
     if candidate is None:
         return None
     
-    # Verify candidate is actually majority in full set
-    # (This final check is already done in the recursion, but we can do it again)
     final_count = count_equivalent(cards, candidate, tester)
     
     if final_count > len(cards) // 2:
@@ -149,18 +94,8 @@ def find_majority_card(cards, tester):
 
 
 def find_majority_card_optimized(cards, tester):
-    """
-    Optimized O(n log n) algorithm using Boyer-Moore-like pairing.
-    
-    This is a cleaner implementation that pairs up cards and eliminates
-    different pairs, similar to Boyer-Moore majority vote.
-    
-    Returns:
-        BankCard or None: majority card or None
-    """
     
     def find_candidate_optimized(cards_subset):
-        """Find potential majority candidate."""
         n = len(cards_subset)
         
         if n == 0:
@@ -168,24 +103,19 @@ def find_majority_card_optimized(cards, tester):
         if n == 1:
             return cards_subset[0]
         
-        # Pair up cards and keep one from each equivalent pair
         survivors = []
         i = 0
         
         while i < n - 1:
             if tester.are_equivalent(cards_subset[i], cards_subset[i + 1]):
-                # Equivalent pair - keep one
                 survivors.append(cards_subset[i])
                 i += 2
             else:
-                # Different pair - eliminate both
                 i += 2
         
-        # If odd number of cards, last one survives
         if i == n - 1:
             survivors.append(cards_subset[-1])
         
-        # Recursively find candidate among survivors
         if len(survivors) == 0:
             return None
         elif len(survivors) == 1:
@@ -194,7 +124,6 @@ def find_majority_card_optimized(cards, tester):
             return find_candidate_optimized(survivors)
     
     def count_equivalent(cards_subset, candidate):
-        """Count equivalent cards."""
         if candidate is None:
             return 0
         count = 0
@@ -203,20 +132,17 @@ def find_majority_card_optimized(cards, tester):
                 count += 1
         return count
     
-    # Find candidate
     candidate = find_candidate_optimized(cards)
     
     if candidate is None:
         return None
     
-    # Verify candidate is majority
     count = count_equivalent(cards, candidate)
     
     return candidate if count > len(cards) // 2 else None
 
 
 def test_fraud_detection():
-    """Test the bank card fraud detection algorithm."""
     
     print("=" * 80)
     print("BANK CARD FRAUD DETECTION - O(n log n) Algorithm")
@@ -230,7 +156,6 @@ def test_fraud_detection():
     print("=" * 80)
     print()
     
-    # Test Case 1: Clear majority
     print("-" * 80)
     print("Test Case 1: Clear Majority (7 out of 10 cards)")
     print("-" * 80)
@@ -266,7 +191,6 @@ def test_fraud_detection():
     print(f"Theoretical max: O(n log n) ≈ {len(cards1) * len(cards1).bit_length()}")
     print()
     
-    # Test Case 2: No majority
     print("-" * 80)
     print("Test Case 2: No Majority (evenly distributed)")
     print("-" * 80)
@@ -298,7 +222,6 @@ def test_fraud_detection():
     print(f"Comparisons used: {tester2.get_count()}")
     print()
     
-    # Test Case 3: Exact threshold (n/2 + 1)
     print("-" * 80)
     print("Test Case 3: Exact Threshold (6 out of 11 cards = just over n/2)")
     print("-" * 80)
@@ -334,7 +257,6 @@ def test_fraud_detection():
     print(f"Comparisons used: {tester3.get_count()}")
     print()
     
-    # Test Case 4: Almost majority (exactly n/2)
     print("-" * 80)
     print("Test Case 4: Almost Majority (5 out of 10 = exactly n/2, NOT majority)")
     print("-" * 80)
@@ -370,7 +292,6 @@ def test_fraud_detection():
     print("Note: Exactly n/2 is NOT a majority (need STRICTLY more than n/2)")
     print()
     
-    # Test Case 5: All same (extreme fraud)
     print("-" * 80)
     print("Test Case 5: All Same Account (Extreme Fraud!)")
     print("-" * 80)
@@ -390,20 +311,17 @@ def test_fraud_detection():
     print(f"Theoretical max: O(n log n) ≈ {len(cards5) * len(cards5).bit_length()}")
     print()
     
-    # Test Case 6: Larger dataset
     print("-" * 80)
     print("Test Case 6: Larger Dataset (n = 50)")
     print("-" * 80)
     tester6 = EquivalenceTester()
     
-    # Create 30 cards with ACC_FRAUD, 20 with other accounts
     cards6 = []
     for i in range(30):
         cards6.append(BankCard(i, "ACC_FRAUD"))
     for i in range(20):
         cards6.append(BankCard(30 + i, f"ACC_{i}"))
     
-    # Shuffle to make it more realistic
     import random
     random.seed(42)
     random.shuffle(cards6)
@@ -431,7 +349,6 @@ def test_fraud_detection():
 
 
 def explain_algorithm():
-    """Explain the algorithm."""
     print("=" * 80)
     print("ALGORITHM EXPLANATION")
     print("=" * 80)
