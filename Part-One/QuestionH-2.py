@@ -1,79 +1,44 @@
 def count_significant_inversions(arr):
-    """
-    Count significant inversions where i < j and arr[i] > 2 * arr[j].
-    Uses modified merge sort to achieve O(n log n) complexity.
-    
-    Args:
-        arr: list of distinct numbers
-    
-    Returns:
-        tuple: (count, sorted_array, comparisons)
-    """
-    comparisons = [0]  # Track comparisons across recursive calls
+    comparisons = [0]
     
     def merge_count(arr):
-        """
-        Recursively count significant inversions using divide and conquer.
-        
-        Returns:
-            tuple: (count, sorted_array)
-        """
         n = len(arr)
         
-        # Base case
         if n <= 1:
             return 0, arr
         
-        # Divide
         mid = n // 2
         left = arr[:mid]
         right = arr[mid:]
         
-        # Conquer: recursively count in left and right halves
         left_count, left_sorted = merge_count(left)
         right_count, right_sorted = merge_count(right)
         
-        # Count significant inversions crossing the middle
         cross_count = count_cross_inversions(left_sorted, right_sorted, comparisons)
         
-        # Merge the two sorted halves
         merged = merge(left_sorted, right_sorted, comparisons)
         
-        # Total inversions
         total_count = left_count + right_count + cross_count
         
         return total_count, merged
     
     def count_cross_inversions(left, right, comp_counter):
-        """
-        Count significant inversions where left[i] > 2 * right[j].
-        Both arrays are sorted.
-        
-        Uses two-pointer technique for efficiency.
-        """
         count = 0
         j = 0
         
-        # For each element in left array
         for i in range(len(left)):
-            # Find how many elements in right satisfy left[i] > 2 * right[j]
             while j < len(right) and left[i] > 2 * right[j]:
                 comp_counter[0] += 1
                 j += 1
             
-            # All elements right[0] to right[j-1] form significant inversions with left[i]
             count += j
             
-            # Count the comparison even if condition fails
             if j < len(right):
                 comp_counter[0] += 1
         
         return count
     
     def merge(left, right, comp_counter):
-        """
-        Merge two sorted arrays.
-        """
         merged = []
         i = j = 0
         
@@ -86,7 +51,6 @@ def count_significant_inversions(arr):
                 merged.append(right[j])
                 j += 1
         
-        # Append remaining elements
         merged.extend(left[i:])
         merged.extend(right[j:])
         
@@ -97,16 +61,6 @@ def count_significant_inversions(arr):
 
 
 def count_significant_inversions_naive(arr):
-    """
-    Naive O(n²) algorithm to count significant inversions.
-    Used for verification.
-    
-    Args:
-        arr: list of distinct numbers
-    
-    Returns:
-        int: count of significant inversions
-    """
     count = 0
     n = len(arr)
     
@@ -119,9 +73,6 @@ def count_significant_inversions_naive(arr):
 
 
 def visualize_inversions(arr):
-    """
-    Find and display all significant inversions in the array.
-    """
     inversions = []
     n = len(arr)
     
@@ -134,7 +85,6 @@ def visualize_inversions(arr):
 
 
 def test_significant_inversions():
-    """Test the significant inversions counting algorithm."""
     
     print("=" * 80)
     print("SIGNIFICANT INVERSIONS COUNTER - O(n log n) Algorithm")
@@ -147,7 +97,6 @@ def test_significant_inversions():
     print("=" * 80)
     print()
     
-    # Test Case 1: Simple example
     print("-" * 80)
     print("Test Case 1: Simple Example")
     print("-" * 80)
@@ -170,7 +119,6 @@ def test_significant_inversions():
     print(f"Match: {count_dc == count_naive} ✓")
     print()
     
-    # Test Case 2: No significant inversions
     print("-" * 80)
     print("Test Case 2: Sorted Array (No Significant Inversions)")
     print("-" * 80)
@@ -187,7 +135,6 @@ def test_significant_inversions():
     print("(Expected 0 since array is sorted)")
     print()
     
-    # Test Case 3: Maximum significant inversions
     print("-" * 80)
     print("Test Case 3: Reverse Sorted (Many Significant Inversions)")
     print("-" * 80)
@@ -209,7 +156,6 @@ def test_significant_inversions():
     print(f"Match: {count_dc == count_naive} ✓")
     print()
     
-    # Test Case 4: Mixed values
     print("-" * 80)
     print("Test Case 4: Mixed Values")
     print("-" * 80)
@@ -232,7 +178,6 @@ def test_significant_inversions():
     print(f"Match: {count_dc == count_naive} ✓")
     print()
     
-    # Test Case 5: Comparison with regular inversions
     print("-" * 80)
     print("Test Case 5: Comparing Regular vs Significant Inversions")
     print("-" * 80)
@@ -240,7 +185,6 @@ def test_significant_inversions():
     print(f"Array: {arr5}")
     print()
     
-    # Count regular inversions
     regular_inversions = []
     for i in range(len(arr5)):
         for j in range(i + 1, len(arr5)):
@@ -267,7 +211,6 @@ def test_significant_inversions():
     print("        (stricter condition means fewer pairs qualify)")
     print()
     
-    # Test Case 6: Larger dataset
     print("-" * 80)
     print("Test Case 6: Larger Dataset (n = 20)")
     print("-" * 80)
@@ -291,22 +234,18 @@ def test_significant_inversions():
     print(f"Efficiency gain: ~{(len(arr6) * (len(arr6) - 1) // 2) / comps:.1f}x faster")
     print()
     
-    # Test Case 7: Edge cases
     print("-" * 80)
     print("Test Case 7: Edge Cases")
     print("-" * 80)
     
-    # Single element
     arr7a = [42]
     count7a, _, _ = count_significant_inversions(arr7a)
     print(f"Single element {arr7a}: {count7a} inversions (expected 0)")
     
-    # Two elements - significant inversion
     arr7b = [10, 4]
     count7b, _, _ = count_significant_inversions(arr7b)
     print(f"Two elements {arr7b}: {count7b} inversions (10 > 2*4=8, so 1)")
     
-    # Two elements - no significant inversion
     arr7c = [10, 6]
     count7c, _, _ = count_significant_inversions(arr7c)
     print(f"Two elements {arr7c}: {count7c} inversions (10 > 2*6=12? No, so 0)")
@@ -314,7 +253,6 @@ def test_significant_inversions():
 
 
 def explain_algorithm():
-    """Explain the algorithm approach."""
     print("=" * 80)
     print("ALGORITHM EXPLANATION")
     print("=" * 80)
