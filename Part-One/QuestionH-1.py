@@ -1,81 +1,35 @@
 class Database:
-    """Simulates a database that can be queried for kth smallest value."""
     
     def __init__(self, values, name):
-        """
-        Initialize database with sorted values.
-        
-        Args:
-            values: list of numerical values (will be sorted)
-            name: name identifier for the database
-        """
         self.values = sorted(values)
         self.name = name
         self.query_count = 0
     
     def query(self, k):
-        """
-        Query for the kth smallest value (1-indexed).
-        
-        Args:
-            k: position of desired value (1 to n)
-        
-        Returns:
-            The kth smallest value in this database
-        """
         self.query_count += 1
         if k < 1 or k > len(self.values):
             return None
         return self.values[k - 1]
     
     def size(self):
-        """Return the number of values in the database."""
         return len(self.values)
     
     def reset_count(self):
-        """Reset query counter."""
         self.query_count = 0
 
 
 def find_median_two_databases(db1, db2):
-    """
-    Find the median (nth smallest) of 2n values across two databases.
-    Uses at most O(log n) queries.
-    
-    Algorithm:
-    - Use binary search on the position in db1
-    - For each position i in db1, we need n-i elements from db2
-    - Check if the elements around position i in db1 and position n-i in db2
-      satisfy the median condition
-    
-    Args:
-        db1: First database
-        db2: Second database
-    
-    Returns:
-        tuple: (median_value, total_queries_made)
-    """
     n = db1.size()
     
-    # Reset query counters
     db1.reset_count()
     db2.reset_count()
     
-    # Binary search on how many elements to take from db1
     left = 0
     right = n
     
     while left <= right:
-        # How many elements from db1 in the first n elements?
         i = (left + right) // 2
-        # Then we need (n - i) elements from db2
         j = n - i
-        
-        # Get boundary values
-        # db1_left: largest value we'd take from db1
-        # db1_right: smallest value we'd NOT take from db1
-        # db2_left: largest value we'd take from db2
-        # db2_right: smallest value we'd NOT take from db2
         
         if i == 0:
             db1_left = float('-inf')
@@ -97,50 +51,27 @@ def find_median_two_databases(db1, db2):
         else:
             db2_right = db2.query(j + 1)
         
-        # Check if we found the correct partition
-        # The median is the maximum of the left parts
-        # This is correct if:
-        # - db1_left <= db2_right (largest from db1 <= smallest remaining in db2)
-        # - db2_left <= db1_right (largest from db2 <= smallest remaining in db1)
-        
         if db1_left <= db2_right and db2_left <= db1_right:
-            # Found the median!
             median = max(db1_left, db2_left)
             total_queries = db1.query_count + db2.query_count
             return median, total_queries
         elif db1_left > db2_right:
-            # Too many elements from db1, move left
             right = i - 1
         else:
-            # Too few elements from db1, move right
             left = i + 1
     
-    # Should never reach here if databases are valid
     return None, db1.query_count + db2.query_count
 
 
 def verify_median(db1, db2, median):
-    """
-    Verify that the found value is indeed the nth smallest.
-    
-    Args:
-        db1: First database
-        db2: Second database
-        median: The claimed median value
-    
-    Returns:
-        bool: True if median is correct
-    """
-    # Combine all values and find actual median
     all_values = sorted(db1.values + db2.values)
     n = len(db1.values)
-    actual_median = all_values[n - 1]  # nth smallest (0-indexed)
+    actual_median = all_values[n - 1]
     
     return median == actual_median
 
 
 def test_median_algorithm():
-    """Test the median finding algorithm with various inputs."""
     
     print("=" * 75)
     print("MEDIAN OF TWO DATABASES - O(log n) Algorithm")
@@ -155,7 +86,6 @@ def test_median_algorithm():
     print("-" * 75)
     print()
     
-    # Test Case 1: Simple example
     print("=" * 75)
     print("Test Case 1: Simple Example (n=5)")
     print("=" * 75)
@@ -179,7 +109,6 @@ def test_median_algorithm():
     print(f"Verification: {'✓ CORRECT' if is_correct else '✗ INCORRECT'}")
     print()
     
-    # Test Case 2: Non-interleaved
     print("=" * 75)
     print("Test Case 2: Non-Interleaved (n=6)")
     print("=" * 75)
@@ -203,7 +132,6 @@ def test_median_algorithm():
     print(f"Verification: {'✓ CORRECT' if is_correct else '✗ INCORRECT'}")
     print()
     
-    # Test Case 3: Reversed order
     print("=" * 75)
     print("Test Case 3: Reversed Order (n=7)")
     print("=" * 75)
@@ -228,7 +156,6 @@ def test_median_algorithm():
     print(f"Verification: {'✓ CORRECT' if is_correct else '✗ INCORRECT'}")
     print()
     
-    # Test Case 4: One database has all small values
     print("=" * 75)
     print("Test Case 4: Skewed Distribution (n=8)")
     print("=" * 75)
@@ -253,7 +180,6 @@ def test_median_algorithm():
     print(f"Verification: {'✓ CORRECT' if is_correct else '✗ INCORRECT'}")
     print()
     
-    # Test Case 5: Larger dataset
     print("=" * 75)
     print("Test Case 5: Larger Dataset (n=16)")
     print("=" * 75)
@@ -278,14 +204,12 @@ def test_median_algorithm():
     print(f"Verification: {'✓ CORRECT' if is_correct else '✗ INCORRECT'}")
     print()
     
-    # Test Case 6: Very large dataset
     print("=" * 75)
     print("Test Case 6: Very Large Dataset (n=1000)")
     print("=" * 75)
     import random
     random.seed(42)
     
-    # Generate two sets of distinct values
     all_vals = list(range(1, 2001))
     random.shuffle(all_vals)
     values1 = sorted(all_vals[:1000])
@@ -311,7 +235,6 @@ def test_median_algorithm():
 
 
 def explain_algorithm():
-    """Detailed explanation of the algorithm."""
     print("=" * 75)
     print("DETAILED ALGORITHM EXPLANATION")
     print("=" * 75)
