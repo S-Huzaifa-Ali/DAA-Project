@@ -1,14 +1,4 @@
 def find_peak_unimodal(A):
-    """
-    Find the peak entry in a unimodal array using divide and conquer.
-    Time Complexity: O(log n)
-    
-    Args:
-        A: A unimodal array where values increase up to position p, then decrease
-    
-    Returns:
-        tuple: (peak_value, peak_index, comparisons_made)
-    """
     left = 0
     right = len(A) - 1
     comparisons = 0
@@ -17,36 +7,20 @@ def find_peak_unimodal(A):
         mid = (left + right) // 2
         comparisons += 1
         
-        # Compare mid with mid+1 to determine which side has the peak
         if A[mid] < A[mid + 1]:
-            # Peak is in the right half (mid+1 to right)
             left = mid + 1
         else:
-            # Peak is in the left half (left to mid, inclusive)
             right = mid
     
-    # left == right, we've found the peak
     return A[left], left, comparisons
 
 
 def create_unimodal_array(n, peak_position):
-    """
-    Create a unimodal array of size n with peak at peak_position.
-    
-    Args:
-        n: size of the array
-        peak_position: index where the peak should be (0 to n-1)
-    
-    Returns:
-        list: unimodal array
-    """
     A = []
     
-    # Increasing part (up to peak)
     for i in range(peak_position + 1):
         A.append(i * 10 + 5)
     
-    # Decreasing part (after peak)
     for i in range(peak_position + 1, n):
         A.append((2 * peak_position - i) * 10 + 5)
     
@@ -54,9 +28,7 @@ def create_unimodal_array(n, peak_position):
 
 
 def test_algorithm():
-    """Test the peak finding algorithm with various inputs."""
     
-    # Test Case 1: Array of size 10
     print("=" * 60)
     print("Test Case 1: Array of size 10, peak at position 6")
     print("=" * 60)
@@ -70,7 +42,6 @@ def test_algorithm():
     print(f"Theoretical maximum: O(log {n1}) ≈ {n1.bit_length() - 1} comparisons")
     print()
     
-    # Test Case 2: Array of size 15
     print("=" * 60)
     print("Test Case 2: Array of size 15, peak at position 3")
     print("=" * 60)
@@ -84,7 +55,6 @@ def test_algorithm():
     print(f"Theoretical maximum: O(log {n2}) ≈ {n2.bit_length() - 1} comparisons")
     print()
     
-    # Test Case 3: Array of size 20
     print("=" * 60)
     print("Test Case 3: Array of size 20, peak at position 12")
     print("=" * 60)
@@ -98,7 +68,6 @@ def test_algorithm():
     print(f"Theoretical maximum: O(log {n3}) ≈ {n3.bit_length() - 1} comparisons")
     print()
     
-    # Test Case 4: Custom input
     print("=" * 60)
     print("Test Case 4: Custom unimodal array")
     print("=" * 60)
@@ -110,7 +79,6 @@ def test_algorithm():
     print(f"Theoretical maximum: O(log {len(custom_array)}) ≈ {len(custom_array).bit_length() - 1} comparisons")
     print()
     
-    # Test Case 5: Edge case - peak at beginning
     print("=" * 60)
     print("Test Case 5: Peak at the beginning (index 0)")
     print("=" * 60)
@@ -121,7 +89,6 @@ def test_algorithm():
     print(f"Number of comparisons: {comps}")
     print()
     
-    # Test Case 6: Edge case - peak at end
     print("=" * 60)
     print("Test Case 6: Peak at the end (index n-1)")
     print("=" * 60)
