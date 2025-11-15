@@ -29,5 +29,25 @@
 
 <img width="917" height="846" alt="image" src="https://github.com/user-attachments/assets/c376c04f-cda5-499b-910f-03f4e1805c08" />
 
+
 ## Part H (1)
+
+<img width="816" height="844" alt="image" src="https://github.com/user-attachments/assets/50cf9b66-ab6c-49ce-bdcb-bcf6e18baafb" />
+
+<img width="822" height="825" alt="image" src="https://github.com/user-attachments/assets/3bde81aa-080f-471f-b9f5-f76870f35a74" />
+
+
+## Part H (2)
+
+<img width="823" height="620" alt="image" src="https://github.com/user-attachments/assets/6eabf3ba-29ee-4684-ac41-52c7143d719e" />
+
+<img width="805" height="624" alt="image" src="https://github.com/user-attachments/assets/47ffad55-85a0-4675-beab-734ffc44272f" />
+
+<img width="926" height="890" alt="image" src="https://github.com/user-attachments/assets/b24af2d5-8bb2-447c-a73c-157960252dc6" />
+
+<img width="891" height="664" alt="image" src="https://github.com/user-attachments/assets/e44a7df2-1e1d-4dc3-a83a-c4f6f49b435c" />
+
+
+## Part H (3)
+
 
