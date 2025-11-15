@@ -20,3 +20,14 @@
 
 ## Part F
 
+<img width="954" height="927" alt="image" src="https://github.com/user-attachments/assets/0c129412-090c-4343-8333-1a944827055d" />
+
+
+## Part G
+
+<img width="761" height="798" alt="image" src="https://github.com/user-attachments/assets/3c424d4a-61af-493d-83d8-3de6447686ff" />
+
+<img width="917" height="846" alt="image" src="https://github.com/user-attachments/assets/c376c04f-cda5-499b-910f-03f4e1805c08" />
+
+## Part H (1)
+
