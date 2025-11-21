@@ -1,4 +1,5 @@
 ## This is for Project Submission Part 2 -> 4
+## All the output screenshots are in the PDF
 ## Structure of this folder is like this
 ### 1. Part Two
 i. Closest_pair_q2_part1
